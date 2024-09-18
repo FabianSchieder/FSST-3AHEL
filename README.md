@@ -1,5 +1,10 @@
 # 1.WH
-
+```c
+... fopen("students.txt", "w");
+```
+```c
+... malloc(12 * sizeof(float));
+```
 ```c
 #include <stdio.h>
 #include <string.h>
