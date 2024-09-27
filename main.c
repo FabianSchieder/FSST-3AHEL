@@ -1,5 +1,20 @@
+/**
+ *******************************************************************************
+  * @copyright Fabian Schieder
+  * @file    main.c
+  * @author  Fabian Schieder
+  * @version V1.0
+  * @date    04.10.2023
+  * @brief   Program for creating a class list
+  * @note
+  *
+  * History:  25.09.2024 created comments
+  */
+
 #include <stdio.h>
 #include <stdlib.h>
+
+/* ------------------------ Struct for a student ---------------------- */
 
 struct Student
 {
@@ -7,6 +22,8 @@ struct Student
     char firstName[20];
     char lastName[20];
 };
+
+/* --------------------------- Function Prototypes ---------------------*/
 
 int printMenu();
 struct Student* addStudents(struct Student* students, int* size);
@@ -52,6 +69,14 @@ int main(void)
     return EXIT_SUCCESS;
 }
 
+
+/**
+  * @brief Function to print the menu
+  * @retval     error code:
+  *             SUCCESS
+  *             ERR_NULLPTR
+  */
+
 int printMenu()
 {
     int option = 0;
@@ -61,6 +86,13 @@ int printMenu()
 
     return option;
 }
+
+/**
+  * @brief Function to add a student
+  * @retval     error code:
+  *             SUCCESS
+  *             ERR_NULLPTR
+  */
 
 struct Student* addStudents(struct Student* students, int* size)
 {
@@ -86,6 +118,13 @@ struct Student* addStudents(struct Student* students, int* size)
     return students;
 }
 
+/**
+  * @brief function to output the students
+  * @retval     error code:
+  *             SUCCESS
+  *             ERR_NULLPTR
+  */
+
 void printStudents(struct Student* students, size_t size)
 {
     for(int i = 0; i < size; i++)
@@ -93,6 +132,13 @@ void printStudents(struct Student* students, size_t size)
         printf("Schueler %i: Nummer: %d, Vorname: %s, Nachname: %s\n", i + 1, students[i].number, students[i].firstName, students[i].lastName);
     }
 }
+
+/**
+  * @brief function to read students from a file
+  * @retval     error code:
+  *             SUCCESS
+  *             ERR_NULLPTR
+  */
 
 struct Student* getStudentsFile(int* size)
 {
@@ -130,6 +176,13 @@ struct Student* getStudentsFile(int* size)
     fclose(file);
     return students;
 }
+
+/**
+  * @brief function to write students in a file
+  * @retval     error code:
+  *             SUCCESS
+  *             ERR_NULLPTR
+  */
 
 void writeStudentsFile(struct Student* students, size_t size)
 {
