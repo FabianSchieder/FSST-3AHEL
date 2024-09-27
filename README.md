@@ -44,7 +44,12 @@ if(start == NULL)
 }
 else
 {
-  
+  h = start;
+  while(h->next != NULL)
+  {
+    h = h->next;
+  }
+  h->next = p;
 }
 ```
 
