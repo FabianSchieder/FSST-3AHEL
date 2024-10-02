@@ -1,5 +1,4 @@
 /**
- *******************************************************************************
   * @copyright Fabian Schieder
   * @file    main.c
   * @author  Fabian Schieder
@@ -14,7 +13,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* ------------------------ Struct for a student ---------------------- */
+/**
+ * Struct for a student
+ */
 
 struct Student
 {
@@ -23,7 +24,9 @@ struct Student
     char lastName[20];
 };
 
-/* --------------------------- Function Prototypes ---------------------*/
+/**
+ * Function Prototypes
+ */
 
 int printMenu();
 struct Student* addStudents(struct Student* students, int* size);
