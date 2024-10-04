@@ -4,9 +4,7 @@
   * @author  Fabian Schieder
   * @version V1.0
   * @date    04.10.2023
-  * @brief   Program for creating a class list
-  * @note
-  *
+  * @brief   Program for creating a student list
   * History:  25.09.2024 created comments
   */
 
@@ -14,198 +12,199 @@
 #include <stdlib.h>
 
 /**
- * Struct for a student
- */
-
+  * @brief Struct for a student
+  */
 struct Student
 {
-    int number;
-    char firstName[20];
-    char lastName[20];
+    int number;             // Student number
+    char firstName[20];      // First name of the student
+    char lastName[20];       // Last name of the student
 };
 
 /**
  * Function Prototypes
  */
-
 int printMenu();
 struct Student* addStudents(struct Student* students, int* size);
 void printStudents(struct Student* students, size_t size);
 struct Student* getStudentsFile(int* size);
 void writeStudentsFile(struct Student* students, size_t size);
 
+/**
+  * @brief   Main function
+  * @retval  Exit code
+  *          EXIT_SUCCESS on success
+  */
 int main(void)
 {
-    int option = 0;
-    int size = 0;
-    struct Student* students = NULL;
+    int option = 0;                 // Menu option selected by user
+    int size = 0;                   // Current number of students
+    struct Student* students = NULL; // Pointer to the dynamic array of students
 
     do
     {
-        option = printMenu();
+        option = printMenu();        // Display menu and get option
 
         switch(option)
         {
             case 1:
-                students = addStudents(students, &size);
+                students = addStudents(students, &size); // Add new students
                 break;
 
             case 2:
-                printStudents(students, size);
+                printStudents(students, size);           // Print student list
                 break;
 
             case 3:
-                students = getStudentsFile(&size);
+                students = getStudentsFile(&size);       // Load students from file
                 break;
 
             case 4:
-                writeStudentsFile(students, size);
+                writeStudentsFile(students, size);       // Save students to file
                 break;
 
             default:
-                break;
+                break;                                   // Exit or invalid option
         }
-    } while(option != 0);
+    } while(option != 0);                                // Continue until user selects "exit"
 
-    free(students);
+    free(students);                                      // Free dynamically allocated memory
 
-    return EXIT_SUCCESS;
+    return EXIT_SUCCESS;                                 // Return success code
 }
 
-
 /**
-  * @brief Function to print the menu
-  * @retval     error code:
-  *             SUCCESS
-  *             ERR_NULLPTR
+  * @brief   Function to print the menu options
+  * @retval  Selected menu option
   */
-
 int printMenu()
 {
-    int option = 0;
+    int option = 0;                                      // Variable to hold user input
 
     printf("\n0. Beenden\n1. Eingabe von Schuelern\n2. Ausgabe von Schuelern\n3. Lesen der Schueler von einem File\n4. Schreiben von Schuelern auf ein File\n\nEingabe: ");
-    scanf(" %i", &option);
+    scanf(" %i", &option);                               // Read user's choice
 
-    return option;
+    return option;                                       // Return selected option
 }
 
 /**
-  * @brief Function to add a student
-  * @retval     error code:
-  *             SUCCESS
-  *             ERR_NULLPTR
+  * @brief   Function to add students
+  * @param   students Pointer to current array of students
+  * @param   size     Pointer to the number of students
+  * @retval  Updated pointer to the array of students
   */
-
 struct Student* addStudents(struct Student* students, int* size)
 {
-    int newStudentsCount = 0;
-    int newSize = 0;
+    int newStudentsCount = 0;                            // Number of new students to add
+    int newSize = 0;                                     // New total size of student array
 
     printf("\rWieviele Schueler wollen Sie hinzufuegen?\n\rEingabe: ");
-    scanf("%i", &newStudentsCount);
+    scanf("%i", &newStudentsCount);                      // Get the number of new students
 
-    newSize = *size + newStudentsCount;
-    students = realloc(students, newSize * sizeof(struct Student));
+    newSize = *size + newStudentsCount;                  // Calculate new size of array
+    students = realloc(students, newSize * sizeof(struct Student)); // Resize array
 
-    for(int i = *size; i < newSize; i++)
+    for(int i = *size; i < newSize; i++)                 // Loop to add new students
     {
-        students[i].number = i + 1;
-        printf("\rVorname (Schueler %i): ", i + 1);
+        students[i].number = i + 1;                      // Assign student number
+        printf("\rVorname (Schueler %i): ", i + 1);      // Prompt for first name
         scanf("%s", students[i].firstName);
-        printf("\rNachname (Schueler %i): ", i + 1);
+        printf("\rNachname (Schueler %i): ", i + 1);     // Prompt for last name
         scanf("%s", students[i].lastName);
     }
 
-    *size = newSize;
-    return students;
+    *size = newSize;                                     // Update size of the student array
+    return students;                                     // Return updated array
 }
 
 /**
-  * @brief function to output the students
-  * @retval     error code:
-  *             SUCCESS
-  *             ERR_NULLPTR
+  * @brief   Function to print all students
+  * @param   students Pointer to array of students
+  * @param   size     Number of students in the array
+  * @retval  None
   */
-
 void printStudents(struct Student* students, size_t size)
 {
-    for(int i = 0; i < size; i++)
+    if(students == NULL)                                 // Check if student array is null
     {
-        printf("Schueler %i: Nummer: %d, Vorname: %s, Nachname: %s\n", i + 1, students[i].number, students[i].firstName, students[i].lastName);
-    }
-}
-
-/**
-  * @brief function to read students from a file
-  * @retval     error code:
-  *             SUCCESS
-  *             ERR_NULLPTR
-  */
-
-struct Student* getStudentsFile(int* size)
-{
-    char filename[256];
-    int count = 0;
-
-    printf("Pfad: ");
-    scanf("%s", filename);
-
-    FILE* file = fopen(filename, "r");
-    if (file == NULL)
-    {
-        printf("Fehler beim Oeffnen der Datei.\n");
-        return NULL;
-    }
-
-    struct Student* students = NULL;
-    struct Student temp;
-
-
-    while (fscanf(file, "%d %19s %19s", &temp.number, temp.firstName, temp.lastName) == 3)
-    {
-        count++;
-        students = realloc(students, count * sizeof(struct Student));
-        if (students == NULL)
-        {
-            printf("Fehler beim Zuweisen von Speicher.\n");
-            fclose(file);
-            return NULL;
-        }
-        students[count - 1] = temp;
-    }
-
-    *size = count;
-    fclose(file);
-    return students;
-}
-
-/**
-  * @brief function to write students in a file
-  * @retval     error code:
-  *             SUCCESS
-  *             ERR_NULLPTR
-  */
-
-void writeStudentsFile(struct Student* students, size_t size)
-{
-    char filename[256];
-    printf("Pfad: ");
-    scanf("%s", filename);
-
-    FILE* file = fopen(filename, "w");
-
-    if (file == NULL)
-    {
-        printf("Fehler beim Oeffnen der Datei zum Schreiben.\n");
+        printf("\rFehler beim Ausgeben der Schueler! \n");                               // Print error message
         return;
     }
 
-    for (size_t i = 0; i < size; i++)
+    for(int i = 0; i < size; i++)                        // Loop through all students
     {
-        fprintf(file, "%d %s %s\n", students[i].number, students[i].firstName, students[i].lastName);
+        printf("\rSchueler %i: Nummer: %d, Vorname: %s, Nachname: %s\n", i + 1, students[i].number, students[i].firstName, students[i].lastName);
+    }
+}
+
+/**
+  * @brief   Function to load students from a file
+  * @param   size Pointer to store the number of students
+  * @retval  Pointer to array of students, or NULL on error
+  */
+struct Student* getStudentsFile(int* size)
+{
+    char filename[256];                                  // Buffer to store file name
+    int count = 0;                                       // Counter for students read from file
+
+    printf("\n\rPfad: ");
+    scanf("%s", filename);                               // Get file path from user
+
+    FILE* file = fopen(filename, "r");                   // Open file for reading
+    if (file == NULL)                                    // Check if file was opened successfully
+    {
+        printf("\n\rFehler beim Oeffnen der Datei!\n");      // Print error message
+        return NULL;
     }
 
-    fclose(file);
-    printf("Schuelerdaten wurden erfolgreich in die Datei geschrieben.\n");
+    struct Student* students = NULL;                     // Pointer to array of students
+    struct Student temp;                                 // Temporary variable for reading students
+
+    while (fscanf(file, "%d %19s %19s", &temp.number, temp.firstName, temp.lastName) == 3)
+    {
+        count++;                                         // Increment student count
+        students = realloc(students, count * sizeof(struct Student)); // Resize student array
+        if (students == NULL)                            // Check for memory allocation failure
+        {
+            printf("Fehler beim Zuweisen von Speicher!\n");
+            fclose(file);                                // Close file
+            return NULL;
+        }
+        students[count - 1] = temp;                      // Copy student data to array
+    }
+
+    printf("\rDatei erfolgreich eingelesen! \n");
+
+    *size = count;                                       // Update size with number of students read
+    fclose(file);                                        // Close file
+    return students;                                     // Return array of students
+}
+
+/**
+  * @brief   Function to save students to a file
+  * @param   students Pointer to array of students
+  * @param   size     Number of students in the array
+  * @retval  None
+  */
+void writeStudentsFile(struct Student* students, size_t size)
+{
+    char filename[256];                                  // Buffer to store file name
+    printf("\n\rPfad: ");
+    scanf("%s", filename);                               // Get file path from user
+
+    FILE* file = fopen(filename, "w");                   // Open file for writing
+
+    if (file == NULL)                                    // Check if file was opened successfully
+    {
+        printf("\n\rFehler beim Oeffnen der Datei zum Schreiben.\n");
+        return;
+    }
+
+    for (size_t i = 0; i < size; i++)                    // Loop through all students
+    {
+        fprintf(file, "%d %s %s\n", students[i].number, students[i].firstName, students[i].lastName); // Write each student to file
+    }
+
+    fclose(file);                                        // Close file
+    printf("\n\rSchuelerdaten wurden erfolgreich in die Datei geschrieben.\n");
 }
