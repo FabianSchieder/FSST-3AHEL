@@ -102,7 +102,7 @@ struct Student* addStudents(struct Student* students, int* size)
     int newStudentsCount = 0;
     int newSize = 0;
 
-    printf("Wieviele Schueler wollen Sie hinzufuegen?\nEingabe: ");
+    printf("\rWieviele Schueler wollen Sie hinzufuegen?\n\rEingabe: ");
     scanf("%i", &newStudentsCount);
 
     newSize = *size + newStudentsCount;
@@ -111,9 +111,9 @@ struct Student* addStudents(struct Student* students, int* size)
     for(int i = *size; i < newSize; i++)
     {
         students[i].number = i + 1;
-        printf("Vorname (Schueler %i): ", i + 1);
+        printf("\rVorname (Schueler %i): ", i + 1);
         scanf("%s", students[i].firstName);
-        printf("Nachname (Schueler %i): ", i + 1);
+        printf("\rNachname (Schueler %i): ", i + 1);
         scanf("%s", students[i].lastName);
     }
 
