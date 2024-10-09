@@ -244,7 +244,3 @@ void writeStudentsFile(struct Student* students, size_t size)
     fclose(file);                                        // Close file
     printf("\n\rSchuelerdaten wurden erfolgreich in die Datei geschrieben.\n");
 }
-/**
- * @brief Test123
- */
-
