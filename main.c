@@ -45,26 +45,38 @@ int main(void)
     {
         option = printMenu();        // Display menu and get option
 
-        switch(option)
+        if (option == -1)
         {
-            case 1:
-                students = addStudents(students, &size); // Add new students
-                break;
+            printf("\nBitte geben Sie eine gueltige Zahl ein.\n\n");
+        }
+        else
+        {
+            switch(option)
+            {
+                case 1:
+                    students = addStudents(students, &size); // Add new students
+                    break;
 
-            case 2:
-                printStudents(students, size);           // Print student list
-                break;
+                case 2:
+                    printStudents(students, size);           // Print student list
+                    break;
 
-            case 3:
-                students = getStudentsFile(&size);       // Load students from file
-                break;
+                case 3:
+                    students = getStudentsFile(&size);       // Load students from file
+                    break;
 
-            case 4:
-                writeStudentsFile(students, size);       // Save students to file
-                break;
+                case 4:
+                    writeStudentsFile(students, size);       // Save students to file
+                    break;
 
-            default:
-                break;                                   // Exit or invalid option
+                case 0:
+                    printf("Programm beendet.\n");      // Exit when option is 0
+                    break;
+
+                default:
+                    printf("Fehlerhafte Eingabe: ");       // invalid option
+                    break;
+            }
         }
     } while(option != 0);                                // Continue until user selects "exit"
 
@@ -77,14 +89,25 @@ int main(void)
   * @brief   Function to print the menu options
   * @retval  Selected menu option
   */
-int printMenu()
+int printMenu(void)
 {
-    int option = 0;                                      // Variable to hold user input
+    int option;
+    printf("Menu:\n");
+    printf("0. Beenden\n");
+    printf("1. Eingabe von Schuelern\n");
+    printf("2. Ausgabe von Schuelern\n");
+    printf("3. Lesen der Schueler von einem File\n");
+    printf("4. Schreiben der Schueler auf ein File\n");
+    printf("\nEingabe: ");
 
-    printf("\n0. Beenden\n1. Eingabe von Schuelern\n2. Ausgabe von Schuelern\n3. Lesen der Schueler von einem File\n4. Schreiben von Schuelern auf ein File\n\nEingabe: ");
-    scanf(" %i", &option);                               // Read user's choice
+    if (scanf("%d", &option) != 1)
+    {
 
-    return option;                                       // Return selected option
+        while(getchar() != '\n');       // discard chars until \n
+        return -1;
+    }
+
+    return option;
 }
 
 /**
@@ -125,6 +148,12 @@ struct Student* addStudents(struct Student* students, int* size)
   */
 void printStudents(struct Student* students, size_t size)
 {
+    if(size == 0)
+    {
+        printf("\rEs sind keine Schueler gespeichert! \n");                               // Print error message
+        return;
+    }
+
     if(students == NULL)                                 // Check if student array is null
     {
         printf("\rFehler beim Ausgeben der Schueler! \n");                               // Print error message
@@ -173,7 +202,14 @@ struct Student* getStudentsFile(int* size)
         students[count - 1] = temp;                      // Copy student data to array
     }
 
-    printf("\rDatei erfolgreich eingelesen! \n");
+    if(count == 0)
+    {
+        printf("\n\rDatei ist leer!\n");
+    }
+    else
+    {
+        printf("\rDatei erfolgreich eingelesen! \n");
+    }
 
     *size = count;                                       // Update size with number of students read
     fclose(file);                                        // Close file
@@ -208,3 +244,7 @@ void writeStudentsFile(struct Student* students, size_t size)
     fclose(file);                                        // Close file
     printf("\n\rSchuelerdaten wurden erfolgreich in die Datei geschrieben.\n");
 }
+/**
+ * @brief Test123
+ */
+
