@@ -1,17 +1,9 @@
 #include <stdio.h>
-#include <string.h>
-
-struct Handy
-{
-    char MARKE[20];
-    int PREIS;
-};
+#include <stdlib.h>
 
 int main(void)
 {
-    struct Handy HANDY1;
-    strcpy(HANDY1.MARKE, "SAMSUNG");
-    HANDY1.PREIS = 999;
+    printf("Test");
 
 return 0;
 }
